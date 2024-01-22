@@ -15,6 +15,10 @@ const App = () => {
 
   const handleBadClicks = () => setClicks({ ...clicks, bad: clicks.bad + 1 });
 
+  const calculateAverage = () => (clicks.good * 1) + (clicks.bad * (-1))
+
+  const calculateTotalComments = () => clicks.good + clicks.neutral + clicks.bad
+
   return (
     <div>
       <h1>give feedback</h1>
@@ -27,6 +31,8 @@ const App = () => {
       <p>good {clicks.good}</p>
       <p>neutral {clicks.neutral}</p>
       <p>bad {clicks.bad}</p>
+      <p>average {calculateAverage()}</p>
+      <p>positive {clicks.good + clicks.neutral + clicks.bad === 0 ? 0 : clicks.good / calculateTotalComments()} %</p>
     </div>
   );
 };
