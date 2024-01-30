@@ -1,3 +1,5 @@
+import StatisticLine from "./StatisticLine";
+
 const Statistics = ({ clicks }) => {
 
   const calculateAverage = () => clicks.good * 1 + clicks.bad * -1;
@@ -27,11 +29,11 @@ const Statistics = ({ clicks }) => {
   return (
     <div>
       <h1>statistics</h1>
-      <p>good {clicks.good}</p>
-      <p>neutral {clicks.neutral}</p>
-      <p>bad {clicks.bad}</p>
-      <p>average {calculateAverage()}</p>
-      <p>positive {calculatePositivePercentaje()} %</p>
+      <StatisticLine text={'good'} value={clicks.good}/>
+      <StatisticLine text={'neutral'} value={clicks.neutral}/>
+      <StatisticLine text={'bad'} value={clicks.bad}/>
+      <StatisticLine text={'average'} value={calculateAverage()}/>
+      <StatisticLine text={'positive'} value={calculatePositivePercentaje()}/>
     </div>
   );
 };
