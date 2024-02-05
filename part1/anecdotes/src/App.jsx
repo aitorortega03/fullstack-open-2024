@@ -12,7 +12,8 @@ const App = () => {
     'The only way to go fast, is to go well.'
   ]
 
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
 
   const getRandomIndex = () => {
     return Math.floor(Math.random() * anecdotes.length);
@@ -23,10 +24,18 @@ const App = () => {
     setSelected(randomIndex);
   };
 
+  const sumNewVote = () => {
+    let copyVotes = [...votes];
+    copyVotes[selected] += 1;
+    setVotes(copyVotes);
+  }
+
   return (
     <div>
-      <p style={{ fontSize: 20 }}>{anecdotes[selected]}</p>
-      <button>vote</button>
+      <p style={{ fontSize: 20 }}>{anecdotes[selected]} <br />
+      has {votes[selected]} votes
+      </p>
+      <button onClick={sumNewVote}>vote</button>
       <button onClick={setNextAnecdote}>next anecdote</button>
     </div>
   )
