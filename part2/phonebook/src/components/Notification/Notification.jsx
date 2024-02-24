@@ -1,8 +1,14 @@
 import './Notification.css'
 
-const Notification = ({ message }) => {
+const Notification = ({ message, messageType }) => {
+
+    const messageTypeClasses = Object.freeze({
+        success: 'succes-notification',
+        error: 'error-notification'
+    })
+
     return ( 
-        <div className='succes-notification'>
+        <div className={`${messageTypeClasses[messageType]}`}>
             {message}
         </div>
      );

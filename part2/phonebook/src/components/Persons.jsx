@@ -1,11 +1,16 @@
 import personService from "../services/personService";
 
-const Persons = ({ persons, nameFilter, setPersons }) => {
+const Persons = ({ persons, nameFilter, setPersons, setNotification, messageTypes }) => {
   const handleDelete = (person) => {
 
     if (window.confirm(`Delete ${person.name} ?`)) {
       personService.deletePerson(person.id)
       .then(personDeleted => setPersons(persons.filter(person => person.id !== personDeleted.id)))
+      .catch(error => {
+        console.log(error)
+        setNotification({message: `Information of ${person.name} has already been removed from server`, type: messageTypes.ERROR})
+        setTimeout(() => setNotification(null), 5000)
+      })
     }
   };
 

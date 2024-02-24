@@ -6,11 +6,17 @@ import personService from "./services/personService";
 import Notification from "./components/Notification/Notification";
 
 const App = () => {
+
+  const messageTypes = Object.freeze({
+    SUCCESS: 'success',
+    ERROR: 'error'
+  })
+
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
-  const [message, setMessage] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personService.getAllPersons()
@@ -30,20 +36,20 @@ const App = () => {
         personService.updatePerson(personToUpdate.id, personToUpdate)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
-            setMessage(`Updated ${newName}`)
+            setNotification({message: `Updated ${newName}`, type: messageTypes.SUCCESS})
             setNewName('')
             setNewNumber('')
-            setTimeout(() => setMessage(''), 5000)
+            setTimeout(() => setNotification(null), 5000)
           })
       }
     } else {
       personService.createPerson(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-          setMessage(`Added ${newName}`)
+          setNotification({message: `Added ${newName}`, type: messageTypes.SUCCESS})
           setNewName('')
           setNewNumber('')
-          setTimeout(() => setMessage(''), 5000)
+          setTimeout(() => setNotification(null), 5000)
         })
     }
   }
@@ -51,12 +57,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      {message && <Notification message={message} />}
+      {notification && <Notification message={notification.message} messageType={notification.type}/>}
       <Filter nameFilter={nameFilter} setNameFilter={setNameFilter} />
       <h3>add a new</h3>
       <PersonForm addName={addName} newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber} />
       <h3>Numbers</h3>
-      <Persons persons={persons} nameFilter={nameFilter} setPersons={setPersons}/>
+      <Persons persons={persons} nameFilter={nameFilter} setPersons={setPersons} setNotification={setNotification} messageTypes={messageTypes}/>
     </div>
   );
 };
