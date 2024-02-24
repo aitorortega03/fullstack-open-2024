@@ -2,7 +2,7 @@ import './Notification.css'
 
 const Notification = ({ message }) => {
     return ( 
-        <div className='message'>
+        <div className='succes-notification'>
             {message}
         </div>
      );
