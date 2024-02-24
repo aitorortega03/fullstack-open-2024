@@ -3,12 +3,14 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import personService from "./services/personService";
+import Notification from "./components/Notification/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     personService.getAllPersons()
@@ -28,16 +30,20 @@ const App = () => {
         personService.updatePerson(personToUpdate.id, personToUpdate)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+            setMessage(`Updated ${newName}`)
             setNewName('')
             setNewNumber('')
+            setTimeout(() => setMessage(''), 5000)
           })
       }
     } else {
       personService.createPerson(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setMessage(`Added ${newName}`)
           setNewName('')
           setNewNumber('')
+          setTimeout(() => setMessage(''), 5000)
         })
     }
   }
@@ -45,6 +51,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      {message && <Notification message={message} />}
       <Filter nameFilter={nameFilter} setNameFilter={setNameFilter} />
       <h3>add a new</h3>
       <PersonForm addName={addName} newName={newName} newNumber={newNumber} setNewName={setNewName} setNewNumber={setNewNumber} />
