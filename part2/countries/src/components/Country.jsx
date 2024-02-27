@@ -11,7 +11,6 @@ const Country = ({ country }) => {
                 ))}
             </ul>
             <img src={country.flags.png} alt={country.flags.alt} />
-            {console.log(country.flags)}
         </div>
      );
 }
