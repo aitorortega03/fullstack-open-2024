@@ -69,6 +69,13 @@ app.delete('/api/persons/:id', (request, response) => {
         error: "number missing"
       })
     }
+
+    const existingName = persons.find(person => person.name === body.name)
+    if (existingName) {
+        return response.status(400).json({
+            error: "name must be unique"
+        })
+    }
   
     const person = {
       id: Math.floor(Math.random() * 1000000),
