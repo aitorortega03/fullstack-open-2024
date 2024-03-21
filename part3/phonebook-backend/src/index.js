@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
 
 app.use(express.json())
 
@@ -26,11 +27,11 @@ let persons = [
     }
 ]
 
-app.get("/api/persons", (request, response) => {
+app.get("/api/persons", morgan('tiny'), (request, response) => {
   response.json(persons)
 })
 
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/persons/:id", morgan('tiny'), (request, response) => {
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
   
@@ -41,21 +42,21 @@ app.get("/api/persons/:id", (request, response) => {
     }
 })
 
-app.get("/info", (request, response) => {
+app.get("/info", morgan('tiny'), (request, response) => {
     response.send(`
     <p>Phonebook has info for ${persons.length} people</p>
     <p>${new Date()}</p>
     `)
 })
 
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', morgan('tiny'), (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(note => note.id !== id)
   
     response.status(204).end()
 })
  
-  app.post('/api/persons', (request, response) => {
+  app.post('/api/persons', morgan('tiny'), (request, response) => {
     const body = request.body
   
     if (!body.name) {
