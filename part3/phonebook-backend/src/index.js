@@ -55,9 +55,10 @@ app.get("/info", morgan('tiny'), (request, response) => {
 
 app.delete('/api/persons/:id', morgan('tiny'), (request, response) => {
     const id = Number(request.params.id)
-    persons = persons.filter(note => note.id !== id)
+    const personDeletedResponse = persons.find(person => person.id === id)
+    persons = persons.filter(person => person.id !== id)
   
-    response.status(204).end()
+    response.json(personDeletedResponse).status(204)
 })
 
 morgan.token('body', (req, res) => JSON.stringify(req.body));
