@@ -1,7 +1,10 @@
+require('dotenv').config()
 const express = require('express')
-const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+const app = express()
+const Person = require('./models/person')
+const person = require('./models/person')
 
 app.use(express.static('dist'))
 
@@ -32,18 +35,14 @@ let persons = [
 ]
 
 app.get("/api/persons", morgan('tiny'), (request, response) => {
-  response.json(persons)
+  Person.find({})
+        .then(persons => response.json(persons))
 })
 
 app.get("/api/persons/:id", morgan('tiny'), (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-  
-    if (person) {
-      response.json(person)
-    } else {
-      response.status(404).end()
-    }
+  Person.findById(request.params.id).then(person => {
+    response.json(person)
+  })
 })
 
 app.get("/info", morgan('tiny'), (request, response) => {
