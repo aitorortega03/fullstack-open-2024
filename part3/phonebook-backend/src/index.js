@@ -36,9 +36,10 @@ app.get("/api/persons/:id", morgan('tiny'), (request, response) => {
     })
 })
 
-app.get("/info", morgan('tiny'), (request, response) => {
+app.get("/info", morgan('tiny'), async (request, response) => {
+    const count = await Person.countDocuments()
     response.send(`
-    <p>Phonebook has info for ${persons.length} people</p>
+    <p>Phonebook has info for ${count} people</p>
     <p>${new Date()}</p>
     `)
 })
