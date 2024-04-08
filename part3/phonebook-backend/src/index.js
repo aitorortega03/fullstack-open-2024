@@ -11,9 +11,18 @@ app.use(express.static('dist'))
 app.use(express.json())
 app.use(cors())
 
-app.get("/api/persons", morgan('tiny'), (request, response) => {
+const errorHandler = (error, request, response, next) => {
+  console.log(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+  next(error)
+}
+
+app.get("/api/persons", morgan('tiny'), (request, response, next) => {
   Person.find({})
         .then(persons => response.json(persons))
+        .catch(error => next(error))
 })
 
 app.get("/api/persons/:id", morgan('tiny'), (request, response) => {
@@ -68,6 +77,8 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
     .then(savedPerson => response.json(savedPerson))
     
 })
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
