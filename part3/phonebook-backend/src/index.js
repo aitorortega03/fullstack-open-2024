@@ -20,13 +20,13 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-app.get("/api/persons", morgan('tiny'), (request, response, next) => {
+app.get('/api/persons', morgan('tiny'), (request, response, next) => {
   Person.find({})
-        .then(persons => response.json(persons))
-        .catch(error => next(error))
+    .then((persons) => response.json(persons))
+    .catch((error) => next(error))
 })
 
-app.get("/api/persons/:id", morgan('tiny'), (request, response) => {
+app.get('/api/persons/:id', morgan('tiny'), (request, response) => {
   Person.findById(request.params.id)
     .then(person => {
       person ? response.json(person) : response.status(404).end()
@@ -37,36 +37,36 @@ app.get("/api/persons/:id", morgan('tiny'), (request, response) => {
     })
 })
 
-app.get("/info", morgan('tiny'), async (request, response) => {
-    const count = await Person.countDocuments()
-    response.send(`
+app.get('/info', morgan('tiny'), async (request, response) => {
+  const count = await Person.countDocuments()
+  response.send(`
     <p>Phonebook has info for ${count} people</p>
     <p>${new Date()}</p>
     `)
 })
 
 app.delete('/api/persons/:id', morgan('tiny'), (request, response, next) => {
-    Person.findByIdAndDelete(request.params.id)
-      .then(person => {
-        response.json(person).status(204).end()
-      })
-      .catch(error => next(error))
+  Person.findByIdAndDelete(request.params.id)
+    .then((person) => {
+      response.json(person).status(204).end()
+    })
+    .catch((error) => next(error))
 })
 
-morgan.token('body', (req, res) => JSON.stringify(req.body));
- 
+morgan.token('body', (req, res) => JSON.stringify(req.body))
+
 app.post('/api/persons', morgan(':method :url :status :res[content-length] - :response-time ms :body'), (request, response, next) => {
   const body = request.body
 
   if (!body.name) {
-    return response.status(400).json({ 
-      error: 'name missing' 
+    return response.status(400).json({
+      error: 'name missing'
     })
   }
 
   if (!body.number) {
     return response.status(400).json({
-      error: "number missing"
+      error: 'number missing'
     })
   }
 
@@ -75,10 +75,10 @@ app.post('/api/persons', morgan(':method :url :status :res[content-length] - :re
     number: body.number
   })
 
-  person.save()
-    .then(savedPerson => response.json(savedPerson))
-    .catch(error => next(error))
-    
+  person
+    .save()
+    .then((savedPerson) => response.json(savedPerson))
+    .catch((error) => next(error))
 })
 
 app.put('/api/persons/:id', morgan(':method :url :status :res[content-length] - :response-time ms :body'), (request, response, next) => {
@@ -89,7 +89,7 @@ app.put('/api/persons/:id', morgan(':method :url :status :res[content-length] - 
     number: body.number
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, {new: true})
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
     .then(updatedPerson => response.json(updatedPerson))
     .catch(error => next(error))
 })
